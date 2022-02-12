@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writing Speed</title>
+    <!-- main css -->
+    <link rel="stylesheet" href="css/main.css">
+    <!-- normalize css -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="css/all.min.css">
+    <!-- google fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="game">
+        <h1 class="title">Typing Speed Game</h1>
+
+        <div class="container">
+
+            <div class="choose-level">
+                <select name="level-name" id="" class="level-select">
+                    <option value="normal">Normal</option>
+                    <option value="easy">Easy</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+
+            <div class="status">
+                <div class="level">Your level is <span></span> </div>
+                <div class="level-time">Level Time <span></span> </div>
+            </div>
+
+            <button class="start-game">Start Game</button>
+
+            <div class="the-word"></div>
+
+            <input type="text" class="game-input" placeholder="Enter the word here...">
+
+            <div class="upcoming-words hidden">
+
+            </div>
+
+            <div class="controls hidden">
+                <div class="time-left">Time Left: <span></span> seconds</div>
+                <div class="score">Score: <span class="got">0</span> From <span class="final"></span></div>
+            </div>
+
+            <div class="result"></div>
+
+        </div>
+    </div>
+
+
+
+
+    <script src="main.js"></script>
+</body>
+
+</html>
