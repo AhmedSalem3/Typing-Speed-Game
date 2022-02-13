@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Writing Speed</title>
+    <title>Words Writing Practice</title>
     <!-- main css -->
     <link rel="stylesheet" href="css/main.css">
     <!-- normalize css -->
@@ -22,7 +22,7 @@
 <body>
 
     <div class="game">
-        <h1 class="title">Typing Speed Game</h1>
+        <h1 class="title">Words Writing Practice</h1>
 
         <div class="container">
 
@@ -56,12 +56,54 @@
 
             <div class="result"></div>
 
+            <div class="instructions">
+
+                <div class="instruction">
+                    <ion-icon name="help-outline"></ion-icon>
+                    <p>
+                        A word will be generated and you will have specific time to complete writing the words without
+                        any mistakes.
+                    </p>
+                </div>
+
+
+                <div class="instruction">
+                    <ion-icon name="checkmark-outline"></ion-icon>
+                    <p>
+                        Once you write the word correctly within the mentioned time, another word will be shown and so
+                        on... until you finish all the words.
+                    </p>
+                </div>
+
+                <div class="instruction">
+                    <ion-icon name="add-outline"></ion-icon>
+                    <p>
+                        If you wrote a wrong word and the time finished, the game will be over
+                    </p>
+                </div>
+
+                <div class="instruction">
+                    <ion-icon name="list-outline"></ion-icon>
+                    <p>
+                        After completing writing all the world your score will be displayed in the leaderboard to keep
+                        track of your progress.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <h2 class="leaderboard-title">Leaderboard</h2>
+            <div class="leaderboard">
+
+            </div>
         </div>
     </div>
 
 
 
-
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="main.js"></script>
 </body>
 

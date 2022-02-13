@@ -10,39 +10,43 @@ let levelSelect = document.querySelector("select"),
   scoreGot = document.querySelector(".score .got"),
   totalScoreSpan = document.querySelector(".score .final"),
   upcomingHolder = document.querySelector(".upcoming-words"),
-  resultDiv = document.querySelector(".result");
+  instructionsHolder = document.querySelector(".instructions"),
+  resultDiv = document.querySelector(".result"),
+  leaderboardHolder = document.querySelector(".leaderboard");
+
+updateLeaderboard();
 
 const words = [
-  "Hello",
-  "Programming",
-  "Code",
-  "Javascript",
-  "Town",
-  "Country",
-  "Testing",
-  "Youtube",
-  "Linkedin",
-  "Twitter",
-  "Github",
-  "Leetcode",
-  "Internet",
-  "Python",
-  "Scala",
-  "Destructuring",
-  "Paradigm",
-  "Styling",
-  "Cascade",
-  "Documentation",
-  "Coding",
-  "Funny",
-  "Working",
-  "Dependencies",
-  "Task",
-  "Runner",
-  "Roles",
-  "Test",
-  "Rust",
-  "Playing",
+  "Acclimatize",
+  "Merge",
+  "Restore",
+  "Deviate",
+  "Manipulate",
+  "Refine",
+  "Transition",
+  "Enlarge",
+  "Diminish",
+  "Eradicate",
+  "Ecosystem",
+  "Refuse",
+  "Unspoiled",
+  "Carnivore",
+  "Predator",
+  "Prey",
+  "Longitude",
+  "Latitude",
+  "Tide",
+  "Marine",
+  "Transplant",
+  "Vaccine",
+  "Antibiotic",
+  "Dose",
+  "Remedy",
+  "Syndrome",
+  "Advocate",
+  "Abstract",
+  "Decay",
+  "Audit",
 ];
 const wordsLength = words.length;
 const levels = {
@@ -52,19 +56,19 @@ const levels = {
 };
 let levelTime = levels[chosenLevel];
 
-updateLevelDetails();
+updateLevelTags();
 
 function updateLevelVar() {
   chosenLevel = levelSelect.value;
   levelTime = levels[chosenLevel];
-  updateLevelDetails();
+  updateLevelTags();
 }
-function updateLevelDetails() {
+function updateLevelTags() {
   levelSpan.innerHTML = chosenLevel;
   timeSpan.innerHTML = levelTime;
 }
 
-let shuffledArr = genWords(words);
+let shuffledwordsArr = genWords(words);
 // setting the total score
 totalScoreSpan.innerHTML = wordsLength;
 
@@ -74,16 +78,18 @@ function startGame() {
   displayWord();
 }
 
+let firstWord = true;
 function displayWord() {
   gameInput.value = "";
 
   let duartion = levelTime;
 
+  firstWord ? (duartion = levelTime * 2) : "";
+  firstWord = false;
+
   getNextWord();
 
   updateUpcoming();
-
-  updateScore();
 
   let timeLeft = setInterval(() => {
     //
@@ -100,12 +106,14 @@ function displayWord() {
 }
 
 function updateScore() {
-  scoreGot.innerHTML = wordsLength - shuffledArr.length - 1;
+  scoreGot.innerHTML++;
 }
 
 function updateUpcoming() {
   upcomingHolder.innerHTML = "";
-  shuffledArr.forEach((word) => {
+  let nextSixWords = shuffledwordsArr.slice(0, 7);
+
+  nextSixWords.forEach((word) => {
     let span = document.createElement("span");
     span.appendChild(document.createTextNode(word));
     upcomingHolder.appendChild(span);
@@ -117,6 +125,7 @@ function checkAnswer() {
   let word = document.querySelector(".the-word").innerHTML.toLowerCase();
 
   if (answer == word) {
+    updateScore();
     checkToEndGame();
   } else {
     endGame(false);
@@ -124,22 +133,40 @@ function checkAnswer() {
 }
 
 function checkToEndGame() {
-  shuffledArr.length == 0 ? endGame(true) : displayWord();
+  shuffledwordsArr.length == 0 ? endGame(true) : displayWord();
 }
 
 function endGame(status) {
+  let wordsPassed = wordsLength - shuffledwordsArr.length - 1;
+
   if (status) {
-    resultSpan(
-      resultDiv,
-      `Congrats!! You Have Completed The Game In ${chosenLevel}`,
-      "good"
-    );
+    resultSpan(resultDiv, `You Have Won In ${chosenLevel} Mode`, "good");
   } else {
-    resultSpan(
-      resultDiv,
-      `You Have Passed ${wordsLength - shuffledArr.length - 1} words`,
-      "bad"
-    );
+    resultSpan(resultDiv, `You Have Passed ${wordsPassed} words`, "bad");
+  }
+  updateLocal(status ? "Win" : "Lose", wordsPassed);
+
+  function updateLocal(status, wordsPassed) {
+    let difficultySpan = document.querySelector(".level span");
+
+    let gameObj = {
+      game: status,
+      difficulty: difficultySpan.innerHTML,
+      progress: wordsPassed,
+      dateCreated: new Date(),
+    };
+
+    let wordsArr = [];
+
+    if (localStorage.getItem("Day1")) {
+      wordsArr = JSON.parse(localStorage.getItem("Day1"));
+    }
+
+    wordsArr.push(gameObj);
+
+    localStorage.setItem("Day1", JSON.stringify(wordsArr));
+
+    updateLeaderboard();
   }
 
   function resultSpan(appender, message, className) {
@@ -151,14 +178,34 @@ function endGame(status) {
   }
 }
 
+function updateLeaderboard() {
+  if (!localStorage.getItem("Day1")) return;
+  leaderboardHolder.innerHTML = "";
+
+  let leaderboard = JSON.parse(localStorage.getItem("Day1"));
+
+  leaderboard.forEach((gamePlayed) => {
+    let { dateCreated, game: status, progress, difficulty } = gamePlayed;
+
+    leaderBoardSpan();
+
+    function leaderBoardSpan() {
+      let message = `${status}, ${progress} words completed in ${difficulty} mode`;
+      let span = document.createElement("span");
+      span.appendChild(document.createTextNode(message));
+      leaderboardHolder.append(span);
+    }
+  });
+}
+
 function getNextWord() {
-  let word = shuffledArr.shift();
+  let word = shuffledwordsArr.shift();
   currentWord.innerHTML = word;
 }
 
-function genWords(array) {
-  // shuffle array
-  let currentIndex = array.length,
+function genWords(wordsArray) {
+  // shuffle wordsArray
+  let currentIndex = wordsArray.length,
     random;
 
   while (currentIndex > 0) {
@@ -166,17 +213,20 @@ function genWords(array) {
 
     currentIndex--;
 
-    [array[random], array[currentIndex]] = [array[currentIndex], array[random]];
+    [wordsArray[random], wordsArray[currentIndex]] = [
+      wordsArray[currentIndex],
+      wordsArray[random],
+    ];
   }
 
-  return array;
+  return wordsArray;
 }
 
 function elementsVisiblity() {
   let hiddenElements = [upcomingHolder, controls];
   hiddenElements.forEach((e) => e.classList.remove("hidden"));
 
-  let willBeRemoved = [levelSelect, startBtn];
+  let willBeRemoved = [levelSelect, startBtn, instructionsHolder];
   willBeRemoved.forEach((e) => e.remove());
 
   gameInput.focus();
@@ -184,13 +234,3 @@ function elementsVisiblity() {
 
 levelSelect.addEventListener("change", updateLevelVar);
 startBtn.addEventListener("click", startGame);
-
-// user clicks the start btn
-// we generate the random array
-// we display the first word in the array with a function with the index
-// then we will start immediately the countdown
-// after the countdown finishes we will check with a function whether the word he entered is identical to the given
-// if so we will shift that word from the array
-// if so we will generate the next word and so on else we wll end game
-// everytime we will check to endgame according to the length of the array
-// if the length is 0 then we will end game
